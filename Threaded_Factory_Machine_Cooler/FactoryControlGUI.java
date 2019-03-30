@@ -65,7 +65,6 @@ public class FactoryControlGUI extends JPanel implements ItemListener {
 
 
     public void populateBarData(){
-        //populate bars
         Color colorBar;
         for(Machine machine: machinesArray){
             addBar(machine.id, machine.getCurrentTemp());
