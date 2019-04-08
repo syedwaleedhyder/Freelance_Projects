@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package newpackage;
 import java.io.*;
 
 public class FileComparison {
@@ -89,14 +88,10 @@ public class FileComparison {
     public static void main(String[]args) throws IOException {
 
         FileComparison f = new FileComparison ("decrypted_M.txt","SampleTextFile_1000kb.txt");
-        FileComparison f1 = new FileComparison ("SampleTextFile_1000kb.txt","decrypted.txt");
-        FileComparison f2 = new FileComparison ("encrypted.txt", "encrypted_M.txt");
+        //FileComparison f1 = new FileComparison ("SampleTextFile_1000kb.txt","decrypted.txt");
+        //FileComparison f2 = new FileComparison ("encrypted.txt", "encrypted_M.txt");
 
         System.out.println("Original file and decrypted file(modified)");
         f.CompareFiles();
-        System.out.println("\nOriginal file amd decrypted file(normal)");
-        f1.CompareFiles();
-        System.out.println("\nEncrypted file(normal) and encrypted file(modified)");
-        f2.CompareFiles();
     }
 }

@@ -3,29 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package newpackage;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Locale;
-import java.util.Scanner;
 
-import static newpackage.Encryption.isPrime;
-
-/**
- * @author obaj9
- */
-public class Decryption {
-    BigInteger e, d, n;
+public class MM_RSA_Decryption {
+    BigInteger e, d, f, g, n;
     String path;
-    BufferedReader encrypted_file;
+    BufferedReader myfile;
 
-    public Decryption(String path) throws FileNotFoundException, IOException {
+    public MM_RSA_Decryption(String path) throws FileNotFoundException, IOException{
         this.path = path;
-        encrypted_file = read_file();
-        this.e = new BigInteger(encrypted_file.readLine());
-        this.n = new BigInteger(encrypted_file.readLine());
-        this.d = calculate_d(this.e, this.n);
+        myfile = read_file();
+        this.f = new BigInteger (myfile.readLine());
+        System.out.println(f.toString());
+        this.g = new BigInteger (myfile.readLine());
+        System.out.println(g.toString());
+        this.n = ((this.g).add(BigInteger.ONE)).divide(BigInteger.valueOf(2));
+        this.d = calculate_d((this.f).subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), this.n);
+        System.out.println(d.toString());
     }
 
     private BigInteger calculate_d(BigInteger e, BigInteger n) {
@@ -45,13 +45,11 @@ public class Decryption {
         }
 
         for (int d = e.intValue() + 1; d < n.intValue(); d++) {
-
             if ((n.mod(BigInteger.valueOf(d)) != BigInteger.valueOf(0)) & (n.mod(BigInteger.valueOf(d)) != BigInteger.valueOf(0)) & (isPrime(d))) {
                 boolean condition = ((BigInteger.valueOf(d).multiply(e)).mod(phiN)).equals(BigInteger.valueOf(1));
                 if (condition) {
                     System.out.println((BigInteger.valueOf(d).multiply(e)).mod(phiN));
                     this.d = new BigInteger(String.valueOf(d));
-                    System.out.printf("e value: %d \n", this.e);
                     System.out.printf("d value: %d \n", this.d);
                     return BigInteger.valueOf(d);
                 }
@@ -60,34 +58,29 @@ public class Decryption {
         return null;
     }
 
-    private BufferedReader read_file() throws FileNotFoundException {
+
+    private BufferedReader read_file() throws FileNotFoundException{
         FileReader filereader = new FileReader(this.path);
-        BufferedReader bf = new BufferedReader(filereader);
+        BufferedReader bf = new BufferedReader (filereader);
         return bf;
     }
 
-    private FileWriter write_file() throws IOException {
-        FileWriter filewriter = new FileWriter("decrypted.txt");
+    private FileWriter write_file() throws IOException{
+        FileWriter filewriter = new FileWriter("decrypted_M.txt");
         return filewriter;
     }
 
-
-    public void decrypt() throws FileNotFoundException, IOException {
-        if (this.d == null) {
-            System.out.println("d cannot be calculated.");
-            return;
-        }
+    public void decrypt() throws FileNotFoundException, IOException{
         FileWriter output = write_file();
         String character;
-        while (null != (character = encrypted_file.readLine())) {
+        while (null != (character = myfile.readLine())){
             BigInteger char_bigint = new BigInteger(character);
-            BigInteger decrypted_char = char_bigint.modPow(this.d, this.n);
-            output.write((char) decrypted_char.intValue());
+            BigInteger encrypted_char = char_bigint.modPow(this.d,(this.g).add(BigInteger.ONE));
+            output.write((char)encrypted_char.intValue());
         }
-
         output.close();
-        encrypted_file.close();
-        System.out.println("File decrypted successfully!");
+        myfile.close();
+        System.out.println("Decryption succeeded! ");
     }
 
     public static boolean isPrime(int number) {
@@ -98,8 +91,9 @@ public class Decryption {
         return true;
     }
 
-    public static void main(String[] args) throws IOException {
-        Decryption decrypt = new Decryption("encrypted.txt");
-        decrypt.decrypt();
+    public static void main(String[]args) throws IOException
+    {
+        MM_RSA_Decryption md = new MM_RSA_Decryption("encrypted_M.txt");
+        md.decrypt();
     }
 }

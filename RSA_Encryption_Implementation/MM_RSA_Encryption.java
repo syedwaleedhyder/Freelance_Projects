@@ -13,11 +13,11 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class ModifiedEncryption {
+public class MM_RSA_Encryption {
     BigInteger prime1_big, prime2_big, e, d, f, g, phiN, n;
     String path;
 
-    public ModifiedEncryption(String path, int prime1, int prime2){
+    public MM_RSA_Encryption(String path, int prime1, int prime2){
 
         this.prime1_big = BigInteger.valueOf(prime1);
         this.prime2_big = BigInteger.valueOf(prime2);
@@ -48,7 +48,7 @@ public class ModifiedEncryption {
         this.prime2_big = BigInteger.valueOf(prime2);
         this.n = prime1_big.multiply(prime2_big);
         this.phiN = (prime1_big.subtract(new BigInteger("1"))).multiply(prime2_big.subtract(new BigInteger("1")));
-        this.g = n.subtract(BigInteger.ONE);
+        this.g = (n.multiply(BigInteger.valueOf(2))).subtract(BigInteger.ONE);
         this.path = path;
         System.out.printf("n value: %d \n",n);
         System.out.printf("phiN value: %d \n",phiN);
@@ -103,12 +103,12 @@ public class ModifiedEncryption {
 
         this.f = (this.e.multiply(BigInteger.valueOf(2))).add(BigInteger.valueOf(1)); //f=(e*2)+1
     }
-    
+
     private FileReader read_file() throws FileNotFoundException{
-         FileReader filereader = new FileReader(this.path);
-         return filereader;
+        FileReader filereader = new FileReader(this.path);
+        return filereader;
     }
-    
+
     private FileWriter write_file() throws IOException{
         FileWriter filewriter = new FileWriter("encrypted_M.txt");
         return filewriter;
@@ -121,11 +121,11 @@ public class ModifiedEncryption {
         }
         return true;
     }
-    
+
     public void encrypt() throws FileNotFoundException, IOException
     {
-        System.out.println(this.f.toString());
-        System.out.println(this.g.toString());
+        System.out.printf( "f: %d\n", this.f);
+        System.out.printf( "g: %d\n", this.g);
         FileReader myfile = read_file();
         FileWriter output = write_file();
         output.write(this.f.toString());
@@ -139,13 +139,13 @@ public class ModifiedEncryption {
             output.write(encrypted_char.toString());
             output.write('\n');
         }
-        
+
         output.close();
         myfile.close();
         System.out.println("Encryption done!");
-        
+
     }
-    
+
     public static void main(String[]args) throws IOException
     {
         Scanner scanner = new Scanner(System.in);
@@ -161,7 +161,7 @@ public class ModifiedEncryption {
             System.out.println("Second input not prime. Exiting.");
             return;
         }
-        ModifiedEncryption me = new ModifiedEncryption("SampleTextFile_1000kb.txt", input1, input2);
+        MM_RSA_Encryption me = new MM_RSA_Encryption("SampleTextFile_1000kb.txt", input1, input2);
         me.encrypt();
     }
 }
