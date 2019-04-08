@@ -88,10 +88,12 @@ public class FileComparison {
     public static void main(String[]args) throws IOException {
 
         FileComparison f = new FileComparison ("decrypted_M.txt","SampleTextFile_1000kb.txt");
+        FileComparison f1 = new FileComparison ("decrypted_MM.txt","SampleTextFile_1000kb.txt");
         //FileComparison f1 = new FileComparison ("SampleTextFile_1000kb.txt","decrypted.txt");
         //FileComparison f2 = new FileComparison ("encrypted.txt", "encrypted_M.txt");
 
         System.out.println("Original file and decrypted file(modified)");
         f.CompareFiles();
+        f1.CompareFiles();
     }
 }

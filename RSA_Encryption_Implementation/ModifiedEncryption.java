@@ -9,8 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Random;
 import java.util.Scanner;
 
 public class ModifiedEncryption {
@@ -19,89 +17,17 @@ public class ModifiedEncryption {
 
     public ModifiedEncryption(String path, int prime1, int prime2){
 
-        this.prime1_big = BigInteger.valueOf(prime1);
-        this.prime2_big = BigInteger.valueOf(prime2);
-        Random r = new Random();
-/*        int prime1,prime2;
-
-
-        int prime[] = new int[165];
-        int counter =0;
-        for (int i = 7; i < 1000; i++)
-        {
-            if (isPrime(i)){
-                prime[counter] = i;
-                counter++;
-            }
-        }
-        while (true){
-            prime1 = prime[r.nextInt(165)];
-            prime2 = prime[r.nextInt(165)];
-            if (prime1*prime2 > 255)
-                break;
-        }
-*/
         System.out.printf("prime number 1: %d \n",prime1);
         System.out.printf("prime number 2: %d \n",prime2);
-
+        this.path = path;
         this.prime1_big = BigInteger.valueOf(prime1);
         this.prime2_big = BigInteger.valueOf(prime2);
         this.n = prime1_big.multiply(prime2_big);
         this.phiN = (prime1_big.subtract(new BigInteger("1"))).multiply(prime2_big.subtract(new BigInteger("1")));
-        this.g = n.subtract(BigInteger.ONE);
-        this.path = path;
-        System.out.printf("n value: %d \n",n);
-        System.out.printf("phiN value: %d \n",phiN);
-
-        boolean eAnddFound = false;
-
-        int number_of_e_to_be_collected = 10;
-        int count_e = 0;
-        BigInteger e_array[] = new BigInteger[number_of_e_to_be_collected];
-        BigInteger d_array[] = new BigInteger[number_of_e_to_be_collected];
-
-        for (int e = (phiN.intValue() - 1); e > 0; e--) {
-            if (phiN.mod(BigInteger.valueOf(e)) != BigInteger.valueOf(0) & n.mod(BigInteger.valueOf(e)) != BigInteger.valueOf(0) & isPrime(e))
-                for (int d = e + 1; d < phiN.intValue(); d++) {
-
-                    if ((phiN.mod(BigInteger.valueOf(d)) != BigInteger.valueOf(0)) & (n.mod(BigInteger.valueOf(d)) != BigInteger.valueOf(0)) & (isPrime(d))) {
-                        boolean condition = ((BigInteger.valueOf(d).multiply(BigInteger.valueOf(e))).mod(phiN)).equals(BigInteger.valueOf(1));
-                        if (condition) {
-                            //candidateEDvalues.add(new valueED(e,d));
-                            System.out.printf("e*d mod phiN: %d \n",((BigInteger.valueOf(d).multiply(BigInteger.valueOf(e))).mod(phiN)));
-                            //this.e = new BigInteger(String.valueOf(e));
-                            //this.d = new BigInteger(String.valueOf(d));
-                            //eAnddFound = true;
-                            System.out.printf("%dth e and d calculated.\n", count_e+1);
-
-                            e_array[count_e] = new BigInteger(String.valueOf(e));
-                            d_array[count_e] = new BigInteger(String.valueOf(d));
-
-                            count_e++;
-                            if(count_e == number_of_e_to_be_collected){
-                                eAnddFound = true;
-                                break;
-                            }
-
-                        }
-                    }
-                }
-            if (eAnddFound == true)
-                break;
-        }
-
-        System.out.println(Arrays.toString(e_array));
-        System.out.println(Arrays.toString(d_array));
-
-        int position_of_e_to_be_selected = r.nextInt(count_e);
-
-        this.e = e_array[position_of_e_to_be_selected];
-        this.d = d_array[position_of_e_to_be_selected];
-
-        System.out.printf("e value: %d \n", this.e);
-        System.out.printf("d value: %d \n", this.d);
-
-        this.f = (this.e.multiply(BigInteger.valueOf(2))).add(BigInteger.valueOf(1)); //f=(e*2)+1
+        KeyGeneration keyGeneration = new KeyGeneration(this);
+        BigInteger[] key = keyGeneration.generator();
+        this.f = key[0];
+        this.g = key[1];
     }
     
     private FileReader read_file() throws FileNotFoundException{
@@ -135,7 +61,7 @@ public class ModifiedEncryption {
         int character;
         while (-1 != (character = myfile.read())){
             BigInteger char_bigint = BigInteger.valueOf(character);
-            BigInteger encrypted_char = char_bigint.modPow( ( (this.f).subtract(BigInteger.ONE)).divide(BigInteger.valueOf(2)), (this.g).add(BigInteger.ONE) );
+            BigInteger encrypted_char = char_bigint.modPow( ( (this.f).subtract(BigInteger.ONE)).divide(BigInteger.valueOf(2)), this.n );
             output.write(encrypted_char.toString());
             output.write('\n');
         }
@@ -149,6 +75,7 @@ public class ModifiedEncryption {
     public static void main(String[]args) throws IOException
     {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("You have to enter two prime numbers such that the product of them is greater than 255.");
         System.out.println("Enter first prime number.");
         int input1 = scanner.nextInt();
         if(!isPrime(input1)){
@@ -159,6 +86,10 @@ public class ModifiedEncryption {
         int input2 = scanner.nextInt();
         if(!isPrime(input2)){
             System.out.println("Second input not prime. Exiting.");
+            return;
+        }
+        if(input1*input2 < 255){
+            System.out.println("Product of the numbers you entered is less than 255. Exiting..");
             return;
         }
         ModifiedEncryption me = new ModifiedEncryption("SampleTextFile_1000kb.txt", input1, input2);

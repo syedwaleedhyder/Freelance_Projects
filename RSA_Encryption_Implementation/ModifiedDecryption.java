@@ -23,7 +23,7 @@ public class ModifiedDecryption {
         System.out.println(f.toString());
         this.g = new BigInteger (myfile.readLine());
         System.out.println(g.toString());
-        this.d = calculate_d((this.f).subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), (this.g).add(BigInteger.ONE));
+        this.d = calculate_d((this.f).subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), (this.g)); // g=n
         System.out.println(d.toString());
     }
 
@@ -74,8 +74,8 @@ public class ModifiedDecryption {
         String character;
         while (null != (character = myfile.readLine())){
             BigInteger char_bigint = new BigInteger(character);
-            BigInteger encrypted_char = char_bigint.modPow(this.d,(this.g).add(BigInteger.ONE));
-            output.write((char)encrypted_char.intValue());
+            BigInteger decrypted_char = char_bigint.modPow(this.d, this.g);
+            output.write((char)decrypted_char.intValue());
         }
         output.close();
         myfile.close();

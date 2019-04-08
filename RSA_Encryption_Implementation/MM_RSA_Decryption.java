@@ -66,7 +66,7 @@ public class MM_RSA_Decryption {
     }
 
     private FileWriter write_file() throws IOException{
-        FileWriter filewriter = new FileWriter("decrypted_M.txt");
+        FileWriter filewriter = new FileWriter("decrypted_MM.txt");
         return filewriter;
     }
 
@@ -75,7 +75,7 @@ public class MM_RSA_Decryption {
         String character;
         while (null != (character = myfile.readLine())){
             BigInteger char_bigint = new BigInteger(character);
-            BigInteger encrypted_char = char_bigint.modPow(this.d,(this.g).add(BigInteger.ONE));
+            BigInteger encrypted_char = char_bigint.modPow(this.d,((this.g).add(BigInteger.ONE)).divide(BigInteger.valueOf(2)));
             output.write((char)encrypted_char.intValue());
         }
         output.close();
@@ -93,7 +93,7 @@ public class MM_RSA_Decryption {
 
     public static void main(String[]args) throws IOException
     {
-        MM_RSA_Decryption md = new MM_RSA_Decryption("encrypted_M.txt");
+        MM_RSA_Decryption md = new MM_RSA_Decryption("encrypted_MM.txt");
         md.decrypt();
     }
 }
