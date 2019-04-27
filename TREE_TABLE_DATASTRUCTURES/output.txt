@@ -1,0 +1,60 @@
+201600003
+Ali Mohamed
+Doha
+3.8
+201600001
+Salih Jaber
+ALDafna
+3.5
+201600004
+Salih Jaber
+ALDafna
+3.5
+201600005
+Majed Abdulla
+Umm Selal
+4.0
+201700003
+Ali Mohamed
+Doha
+3.8
+201700002
+Salih Jaber
+ALDafna
+3.5
+201700001
+Omar Salim
+AlRayyan
+3.9
+201700004
+Salih Jaber
+ALDafna
+3.5
+201700005
+Majed Abdulla
+Umm Selal
+4.0
+201800003
+Ali Mohamed
+Doha
+3.8
+201800001
+Salih Jaber
+ALDafna
+3.5
+201800002
+Omar Salim
+AlRayyan
+3.9
+201800004
+Salih Jaber
+ALDafna
+3.5
+201800005
+Majed Abdulla
+Umm Selal
+4.0
+2019
+Michael
+Chicago
+3.3
